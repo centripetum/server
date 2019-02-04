@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  init:
+    image: postgres-pg-rrule
+    volumes:
+      - ../../docs:/tmp/docs
+    command: sh /tmp/docs/init_postgres.sh db ${POSTGRES_PASSWORD} ${PASSWORD}
+
+networks:
+  default:
+    external:
+      name: centripetal-dev_default

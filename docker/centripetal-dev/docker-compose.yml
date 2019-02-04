@@ -1,0 +1,48 @@
+version: '3'
+
+services:
+  db:
+    image: postgres-pg-rrule
+    build:
+      context: ../postgres-pg-rrule
+    environment:
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    volumes:
+      - data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+
+  server:
+    image: image-node-dev
+    build:
+      context: ../image-node-dev
+    depends_on:
+      - db
+    environment:
+      - PROJECT_PATH=packages/server
+      - WAIT_SEC=2
+      - TZ=Pacific/Auckland
+      - CP_DATABASE_URL=postgres://cp_postgraphile:${PASSWORD}@db:5432/centripetal
+    volumes:
+      - ../..:/home/node/workspace:rw
+    ports:
+      - 4000:4000
+
+  # client:
+  #   image: image-node-dev
+  #   depends_on:
+  #     - server
+  #   environment:
+  #     - PROJECT_PATH=packages/client
+  #     - START_SCRIPT=start
+  #     - WAIT_SEC=6
+  #     - TZ=Pacific/Auckland
+  #     - HOST=0.0.0.0
+  #   volumes:
+  #     - ../..:/home/node/workspace:rw
+  #   ports:
+  #     - 3000:3000
+  #     - 9222:9222
+
+volumes:
+  data:
