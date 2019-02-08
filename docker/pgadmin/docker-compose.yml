@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_EMAIL}
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_PASSWORD}
+    volumes:
+      - data:/var/lib/pgadmin
+    ports:
+      - 5050:80
+
+volumes:
+  data:
+
+networks:
+  default:
+    external:
+      name: centripetal-dev_default
