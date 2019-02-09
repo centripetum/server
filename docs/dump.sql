@@ -293,26 +293,26 @@ COMMENT ON FUNCTION app_private.delete_unused_tags() IS 'Deletes any unused tags
 
 
 --
--- Name: set_account(); Type: FUNCTION; Schema: app_private; Owner: cp_postgraphile
+-- Name: set_account_id(); Type: FUNCTION; Schema: app_private; Owner: cp_postgraphile
 --
 
-CREATE FUNCTION app_private.set_account() RETURNS trigger
+CREATE FUNCTION app_private.set_account_id() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
 BEGIN
-  new.account := current_setting('jwt.claims.account_id', true)::uuid;
+  new.account_id := current_setting('jwt.claims.account_id', true)::uuid;
   RETURN new;
 END;
 $$;
 
 
-ALTER FUNCTION app_private.set_account() OWNER TO cp_postgraphile;
+ALTER FUNCTION app_private.set_account_id() OWNER TO cp_postgraphile;
 
 --
--- Name: FUNCTION set_account(); Type: COMMENT; Schema: app_private; Owner: cp_postgraphile
+-- Name: FUNCTION set_account_id(); Type: COMMENT; Schema: app_private; Owner: cp_postgraphile
 --
 
-COMMENT ON FUNCTION app_private.set_account() IS 'Sets the account that created a record (triggered).';
+COMMENT ON FUNCTION app_private.set_account_id() IS 'Sets the account that created a record (triggered).';
 
 
 --
@@ -3323,7 +3323,7 @@ CREATE TRIGGER delete_unused_tags_on_venue_tag_deletion AFTER DELETE ON app_publ
 -- Name: duration duration_account; Type: TRIGGER; Schema: app_public; Owner: cp_postgraphile
 --
 
-CREATE TRIGGER duration_account BEFORE INSERT ON app_public.duration FOR EACH ROW EXECUTE PROCEDURE app_private.set_account();
+CREATE TRIGGER duration_account BEFORE INSERT ON app_public.duration FOR EACH ROW EXECUTE PROCEDURE app_private.set_account_id();
 
 
 --
@@ -3337,7 +3337,7 @@ CREATE TRIGGER duration_updated_at BEFORE UPDATE ON app_public.duration FOR EACH
 -- Name: event event_account; Type: TRIGGER; Schema: app_public; Owner: cp_postgraphile
 --
 
-CREATE TRIGGER event_account BEFORE INSERT ON app_public.event FOR EACH ROW EXECUTE PROCEDURE app_private.set_account();
+CREATE TRIGGER event_account BEFORE INSERT ON app_public.event FOR EACH ROW EXECUTE PROCEDURE app_private.set_account_id();
 
 
 --
@@ -3351,7 +3351,7 @@ CREATE TRIGGER event_positioned_on_insertion BEFORE INSERT ON app_public.event F
 -- Name: event_type event_type_account; Type: TRIGGER; Schema: app_public; Owner: cp_postgraphile
 --
 
-CREATE TRIGGER event_type_account BEFORE INSERT ON app_public.event_type FOR EACH ROW EXECUTE PROCEDURE app_private.set_account();
+CREATE TRIGGER event_type_account BEFORE INSERT ON app_public.event_type FOR EACH ROW EXECUTE PROCEDURE app_private.set_account_id();
 
 
 --
@@ -3379,14 +3379,14 @@ CREATE TRIGGER events_repositioned_on_deletion AFTER DELETE ON app_public.event 
 -- Name: hypertext_link hypertext_link_account; Type: TRIGGER; Schema: app_public; Owner: cp_postgraphile
 --
 
-CREATE TRIGGER hypertext_link_account BEFORE INSERT ON app_public.hypertext_link FOR EACH ROW EXECUTE PROCEDURE app_private.set_account();
+CREATE TRIGGER hypertext_link_account BEFORE INSERT ON app_public.hypertext_link FOR EACH ROW EXECUTE PROCEDURE app_private.set_account_id();
 
 
 --
 -- Name: hypertext_link_type hypertext_link_type_account; Type: TRIGGER; Schema: app_public; Owner: cp_postgraphile
 --
 
-CREATE TRIGGER hypertext_link_type_account BEFORE INSERT ON app_public.hypertext_link_type FOR EACH ROW EXECUTE PROCEDURE app_private.set_account();
+CREATE TRIGGER hypertext_link_type_account BEFORE INSERT ON app_public.hypertext_link_type FOR EACH ROW EXECUTE PROCEDURE app_private.set_account_id();
 
 
 --
@@ -3407,7 +3407,7 @@ CREATE TRIGGER hypertext_link_updated_at BEFORE UPDATE ON app_public.hypertext_l
 -- Name: image image_account; Type: TRIGGER; Schema: app_public; Owner: cp_postgraphile
 --
 
-CREATE TRIGGER image_account BEFORE INSERT ON app_public.image FOR EACH ROW EXECUTE PROCEDURE app_private.set_account();
+CREATE TRIGGER image_account BEFORE INSERT ON app_public.image FOR EACH ROW EXECUTE PROCEDURE app_private.set_account_id();
 
 
 --
@@ -3421,7 +3421,7 @@ CREATE TRIGGER image_updated_at BEFORE UPDATE ON app_public.image FOR EACH ROW E
 -- Name: longdesc longdesc_account; Type: TRIGGER; Schema: app_public; Owner: cp_postgraphile
 --
 
-CREATE TRIGGER longdesc_account BEFORE INSERT ON app_public.longdesc FOR EACH ROW EXECUTE PROCEDURE app_private.set_account();
+CREATE TRIGGER longdesc_account BEFORE INSERT ON app_public.longdesc FOR EACH ROW EXECUTE PROCEDURE app_private.set_account_id();
 
 
 --
@@ -3477,7 +3477,7 @@ CREATE TRIGGER managed_page_view_refreshed_on_venue_update AFTER UPDATE ON app_p
 -- Name: organization organization_account; Type: TRIGGER; Schema: app_public; Owner: cp_postgraphile
 --
 
-CREATE TRIGGER organization_account BEFORE INSERT ON app_public.organization FOR EACH ROW EXECUTE PROCEDURE app_private.set_account();
+CREATE TRIGGER organization_account BEFORE INSERT ON app_public.organization FOR EACH ROW EXECUTE PROCEDURE app_private.set_account_id();
 
 
 --
@@ -3505,7 +3505,7 @@ CREATE TRIGGER organizations_repositioned_on_deletion AFTER DELETE ON app_public
 -- Name: tag tag_account; Type: TRIGGER; Schema: app_public; Owner: cp_postgraphile
 --
 
-CREATE TRIGGER tag_account BEFORE INSERT ON app_public.tag FOR EACH ROW EXECUTE PROCEDURE app_private.set_account();
+CREATE TRIGGER tag_account BEFORE INSERT ON app_public.tag FOR EACH ROW EXECUTE PROCEDURE app_private.set_account_id();
 
 
 --
@@ -3519,7 +3519,7 @@ CREATE TRIGGER tag_updated_at BEFORE UPDATE ON app_public.tag FOR EACH ROW EXECU
 -- Name: venue venue_account; Type: TRIGGER; Schema: app_public; Owner: cp_postgraphile
 --
 
-CREATE TRIGGER venue_account BEFORE INSERT ON app_public.venue FOR EACH ROW EXECUTE PROCEDURE app_private.set_account();
+CREATE TRIGGER venue_account BEFORE INSERT ON app_public.venue FOR EACH ROW EXECUTE PROCEDURE app_private.set_account_id();
 
 
 --
@@ -4073,11 +4073,11 @@ GRANT ALL ON FUNCTION app_private.delete_unused_tags() TO cp_postgraphile WITH G
 
 
 --
--- Name: FUNCTION set_account(); Type: ACL; Schema: app_private; Owner: cp_postgraphile
+-- Name: FUNCTION set_account_id(); Type: ACL; Schema: app_private; Owner: cp_postgraphile
 --
 
-REVOKE ALL ON FUNCTION app_private.set_account() FROM cp_postgraphile;
-GRANT ALL ON FUNCTION app_private.set_account() TO cp_postgraphile WITH GRANT OPTION;
+REVOKE ALL ON FUNCTION app_private.set_account_id() FROM cp_postgraphile;
+GRANT ALL ON FUNCTION app_private.set_account_id() TO cp_postgraphile WITH GRANT OPTION;
 
 
 --
